@@ -6,8 +6,12 @@ function App() {
   const { photos, loading, error } = useFetchPhotos();
   const [searchQuery, setSearchQuery] = useState('');
 
-  const initialFavourites: FavouritesState = { favourites: loadFavouritesFromStorage() };
-  const [favouritesState, dispatch] = useReducer(favouritesReducer, initialFavourites);
+  const [favouritesState, dispatch] = useReducer(favouritesReducer, { favourites: [] });
+
+  useEffect(() => {
+    const favourites = loadFavouritesFromStorage();
+    dispatch({ type: 'LOAD', favourites });
+  }, []);
 
   useEffect(() => {
     saveFavouritesToStorage(favouritesState.favourites);
